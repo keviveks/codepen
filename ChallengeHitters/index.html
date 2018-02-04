@@ -1,0 +1,149 @@
+<html>
+<head>
+	<title>ChallengeCounter | keviveks</title>
+	<style type="text/css">
+		.container {
+			height: 500px;
+			width: 100%;
+			border: 2px solid red;
+		}
+		.container > div {
+			position: relative;
+			float: left;
+			width: 30%;
+			margin: 1%;
+			border: 1px solid green;
+		}
+
+		.commons {
+			position: absolute;
+			height: 280%;
+			width: 80%;
+			border-radius: 50%;
+			color: white;
+			font-size: 18px;
+			text-align: center;
+		}
+		#timer {
+			background-color: cadetblue;
+		}
+
+		#challenge {
+			height: 240%;
+			background-color: grey;
+		}
+
+		#counter {
+			background-color: brown;
+		}
+
+		#challengeHitter {
+			background-color: black;
+		}
+
+		#reset {
+			background-color: goldenrod;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div>
+			<h2>Timer</h2>
+			<div class="commons" id="timer">
+				<h3>0</h3>
+			</div>
+			<div id="min"></div>
+		</div>
+		<div>
+			<h1>Challenge</h1>
+			<div class="commons" id="challenge">
+				<h3>Click to Start!</h3>
+			</div>
+		</div>
+		<div>
+			<h2>Counter</h2>
+			<div class="commons" id="counter">
+				<h3>0</h3>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+		var timer = document.querySelector("#timer");
+		var challenge = document.querySelector("#challenge");
+		var counter = document.querySelector("#counter");
+
+		// constructor
+		function myApp(timer, challenge, counter) {
+			this.timer = timer;
+			this.challenge = challenge;
+			this.counter = counter;
+		}
+		
+		// instantiate class
+		var MyApp = new myApp(timer, challenge, counter);
+
+		MyApp.startApp = function() {
+			this.startChallenge();
+			this.startTimer();
+		};
+
+		MyApp.startChallenge = function() {
+			this.challenge.outerHTML = "<div class='commons' id='challengeHitter'><h3>Hitter!!!</h3></div>";
+
+			this.challengeHitter = document.querySelector("#challengeHitter");
+			this.challengeHitter.onclick = startGame;
+		};
+
+		MyApp.startTimer = function() {
+			var time = 0;
+			var T = setInterval(function(){
+				if(time >= 60) {
+					clearInterval(T);
+					MyApp.stopApp();
+				} else {
+					++time;
+					this.timer.children[0].innerHTML = time;
+				}
+			}, 100);
+		};
+
+		MyApp.runCounter = function(count) {
+			this.counter.children[0].innerHTML = ++count;
+		};
+
+		MyApp.stopApp = function() {
+			this.challengeHitter.outerHTML = "<div class='commons' id='reset'><h3>Nice shots!<br>Click to reset game!</h3></div>";
+
+			this.reset = document.querySelector("#reset");
+			this.reset.onclick = resetGame;
+		};
+
+		challenge.onclick = init;
+
+		function init() {
+			MyApp.startApp();
+		}
+
+		function startGame() {
+			var count = counter.children[0].innerHTML;
+
+			MyApp.runCounter(count);
+		}
+
+		function resetGame() {
+			alert("Resetting Game!!! <br> Happy Hitting!!!");
+
+			MyApp.reset.outerHTML = "<div class='commons' id='challenge'><h3>Click to start!</h3></div>";
+
+			MyApp.challenge = document.querySelector("#challenge");
+			MyApp.challenge.onclick = init;
+
+			timer.children[0].innerHTML = 0;
+			counter.children[0].innerHTML = 0;
+		}
+	</script>
+</body>
+</html>
