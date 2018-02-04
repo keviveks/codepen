@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Comment Box</title>
+        <style media="screen">
+            .comment {
+                border: 1px solid;
+                padding: 10px;
+            }
+            
+            .reply {
+                border: 1px solid;
+                margin-left: 20px;
+                margin-top: 10px;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <button type="button" name="button" id="addCommentBtn">Add Comment</button>
+        </div>
+        
+    </body>
+    <script type="text/javascript">
+    
+        var myApp = {};
+        
+        myApp.init = function() {
+            var addCommentBtn = document.querySelector("#addCommentBtn");
+            addCommentBtn.onclick = function() {
+                myApp.CommentBox.newComment(this.parentElement);
+            }
+        }
+        
+        myApp.CommentBox = {
+            newBox: "",
+            newComment: function(parent) {
+                this.newBox = document.createElement("div");
+                this.newBox.className = "comment";
+                this.newBox.innerHTML = '<textarea name="name" rows="3" cols="10"></textarea><br>';
+                parent.appendChild(this.newBox);
+                myApp.common.createButtons("CommentBox");
+            },
+            like: function() {
+                alert("like function");
+            },
+            edit: function() {
+                alert("edit function");
+            },
+            reply: function() {
+                myApp.ReplyBox.newReply(this.parentElement);
+            },
+            delete: function() {
+                alert("delete function");
+            }
+        }
+        
+        myApp.ReplyBox = {
+            newBox: "",
+            newReply: function(parent) {
+                this.newBox = document.createElement("div");
+                this.newBox.className = "reply";
+                this.newBox.innerHTML = '<textarea name="name" rows="3" cols="10"></textarea><br>';
+                parent.appendChild(this.newBox);
+                myApp.common.createButtons("ReplyBox");
+            },
+            like: function() {
+                alert("like function");
+            },
+            edit: function() {
+                alert("edit function");
+            },
+            reply: function() {
+                myApp.ReplyBox.newReply(this.parentElement);
+            },
+            delete: function() {
+                alert("delete function");
+            }
+        }
+        
+        myApp.common = {
+            buttons: [
+                "like", "edit", "reply", "delete"
+            ],
+            
+            createButtons: function(box) {
+                for(var i=0; i<this.buttons.length; i++) {
+                    var btn = document.createElement("button");
+                    btn.textContent = this.buttons[i];
+                    btn.addEventListener("click", window["myApp"][box][this.buttons[i]]);
+                    window["myApp"][box]["newBox"].appendChild(btn);
+                }
+            }
+        }
+        
+        myApp.init();
+        
+    </script>
+</html>
