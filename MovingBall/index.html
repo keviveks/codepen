@@ -1,0 +1,107 @@
+<html>
+<head>
+	<title>Moving Ball | keviveks</title>
+	<style type="text/css">
+		.container {
+			width: 500px;
+			height: 500px;
+			background-color: #121212;
+			margin: 20px auto;
+			border: 2px solid #c00;
+		}
+		.ball {
+			height: 50px;
+			width: 50px;
+			border-radius: 50%;
+			background-color: #fefefe;
+			text-align: center;
+			margin: 225px auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="ball"></div>
+	</div>
+
+	<script type="text/javascript">
+		var ball = document.querySelector(".ball");
+		var margin = 225;
+		var TIL; // Time Interval
+		function moveTop(reverse) {
+			var count = 0;
+			TIL = setInterval(function(){
+				if(Math.abs(count) >= 225) {
+					clearInterval(TIL);
+					if (typeof reverse === "function") {
+						reverse(moveRight);
+					}
+				} else {
+					++count;
+					ball.style.margin = --margin + 'px 225px';
+				}
+			}, 5);
+		}
+
+		function moveBottom(reverse) {
+			var count = 0;
+			TIL = setInterval(function(){
+				if(Math.abs(count) >= 225) {
+					clearInterval(TIL);
+					if (typeof reverse === "function") {
+						reverse(moveLeft);
+					}
+				} else {
+					count++;
+					ball.style.margin = ++margin + 'px 225px';
+				}
+			}, 5);
+		}
+
+		function moveRight(reverse) {
+			var count = 0;
+			TIL = setInterval(function(){
+				if(Math.abs(count) >= 225) {
+					clearInterval(TIL);
+					if (typeof reverse === "function") {
+						reverse(moveBottom);
+					}
+				} else {
+					count++;
+					ball.style.margin = '225px ' + ++margin + 'px';
+				}
+			}, 5);
+		}
+
+		function moveLeft(reverse) {
+			var count = 0;
+			TIL = setInterval(function(){
+				if(Math.abs(count) >= 225) {
+					clearInterval(TIL);
+					if (typeof reverse === "function") {
+						reverse(moveTop);
+					}
+				} else {
+					++count;
+					ball.style.margin = '225px ' + --margin + 'px';
+				}
+			}, 5);
+		}
+
+		ball.addEventListener("click", moveTop(moveBottom));
+
+		ball.ondblclick = start;
+
+		function start() {
+			moveTop(moveBottom)
+		}
+
+		ball.onclick = stop;
+
+		function stop() {
+			clearInterval(TIL);
+			ball.style.margin = '225px auto';
+		}
+	</script>
+</body>
+</html>
