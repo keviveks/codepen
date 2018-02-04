@@ -1,0 +1,185 @@
+<html>
+	<head>
+		<title>XO | keviveks</title>
+		<style>
+			.head {
+				position: relative;
+				left: 46%;
+			}
+			table {
+				border: 1px solid black;
+				margin: 0 auto;
+			}
+			.left {
+				position: relative;
+				float: left;
+			}
+			.right {
+				position: relative;
+				float: right;
+			}
+			button {
+			    width: 30px;
+			    height: 30px;
+			    background-color: white;
+			    border: 1px solid #dedcdc;
+			    border-radius: 5px;
+			}
+			button:active {
+				outline: none;
+			}
+			button:focus {
+				outline: none;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="head">
+			<h2>Play XO</h2>
+		</div>
+		<div class="left">
+			<h3>Player X</h3>
+			<input type="text" name="player-x" id="player-x">
+		</div>
+		<div class="right">
+			<h3>Player O</h3>
+			<input type="text" name="player-o" id="player-o">
+		</div>
+		<table>
+			<tr>
+				<td><button class="xo-btn" id="xo-00"> </button></td>
+				<td><button class="xo-btn" id="xo-01"> </button></td>
+				<td><button class="xo-btn" id="xo-02"> </button></td>
+			</tr>
+			<tr>
+				<td><button class="xo-btn" id="xo-10"> </button></td>
+				<td><button class="xo-btn" id="xo-11"> </button></td>
+				<td><button class="xo-btn" id="xo-12"> </button></td>
+			</tr>
+			<tr>
+				<td><button class="xo-btn" id="xo-20"> </button></td>
+				<td><button class="xo-btn" id="xo-21"> </button></td>
+				<td><button class="xo-btn" id="xo-22"> </button></td>
+			</tr>
+		</table>
+		
+		<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+		<script type="text/javascript">
+			var playerX = "";
+			var playerY = "";
+
+			/**
+			 * Play Class
+			 */
+			function PlayXO(sym, btn) {
+				this.playSym = sym;
+				this.playBtn = btn;
+				// this.tableArr = [];
+				this.win = false;
+				this.draw = true;
+
+				this.start();
+			}
+
+			/**
+			 * Start Game
+			 */
+			PlayXO.prototype.start = function() {
+				if(this.playBtn.html() == " ") {
+					this.playBtn.html(this.playSym);
+
+					this.check();
+				}				
+			};
+
+			/**
+			 * Collect all value in array (!!Not Used!!)
+			 */
+			PlayXO.prototype.collect = function() {
+				for (var i = 0; i < 3; ++i) {
+					this.tableArr[i] = [];
+					for (var j = 0; j < 3; ++j) {
+						this.tableArr[i][j] = $('#xo-' + i + '-' + j).html();
+					};
+				};
+			};
+
+			/**
+			 * Check win 
+			 */
+			PlayXO.prototype.check = function() {
+				// this.collect();
+				var checkArr = [
+					['00','01','02'],
+					['10','11','12'],
+					['20','21','22'],
+
+					['00','10','20'],
+					['01','11','21'],
+					['02','12','22'],
+
+					['00','11','22'],
+					['02','11','20']
+				];
+				var play = this;
+				$.each(checkArr, function(k, arr) {
+					var a = $("#xo-" + arr[0]).html();
+					var b = $("#xo-" + arr[1]).html();
+					var c = $("#xo-" + arr[2]).html();
+					if(a == b && b == c && c == play.playSym) {
+						play.win = true;
+						return false;
+					} else if(a == " " || b == " " || c == " ") play.draw = false;
+				});
+				this.end();
+			};
+
+			/**
+			 * End Game
+			 */
+			PlayXO.prototype.end = function() {
+				if(this.win === true) {
+					this.score();
+					alert("Congrats Player " + this.playSym + " won!!!");
+					this.reset();
+				} else if(this.draw === true) {
+					alert("Match draw play again!!!");
+					this.reset();
+				}
+			};
+
+			/**
+			 * Score Update
+			 */
+			PlayXO.prototype.score = function() {
+				var score = $("#player-" + this.playSym).val();
+				score = (score == "") ? 0 : score;
+				$("#player-" + this.playSym).val(++score);
+			};
+
+			/**
+			 * Reset Game
+			 */
+			PlayXO.prototype.reset = function() {
+				$('button').html(" ");
+				playerX = "";
+			};
+
+			/**
+			 * Button click event to start Game
+			 */
+			$(document).ready(function() {
+				$('button').on("click", function() {
+					if(playerX === "") {
+						playerY = "";
+						playerX = new PlayXO("x", $(this));
+					} else {
+						playerX = "";
+						playerY = new PlayXO("o", $(this));
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
