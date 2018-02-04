@@ -1,0 +1,80 @@
+<html>
+<head>
+	<title>ChangingText | keviveks</title>
+
+	<style type="text/css">
+		.container {
+			width: 200px;
+			height: 100px;
+			border: 1px green solid;
+			text-align: center;
+			margin: 0px auto;
+			font-family: fantasy;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1 id="text-holder"></h1>
+	</div>
+	
+	<script type="text/javascript">
+		var textHolder = document.querySelector("#text-holder");
+		var newWord;
+		var currentWord = "";
+
+		function changingText() {
+			this.words = ['passionate','focused','enthusiastic'];
+			this.step = 0;
+		}
+
+		var ChangingText = new changingText();
+		
+
+		ChangingText.addWord = function() {
+			if(currentWord.length < 1) {
+				newWord = this.words[this.step];
+			}
+
+			var currentLength = currentWord.length;
+
+			if(currentLength == newWord.length) {
+				ChangingText.deleteWord();
+				return;
+			}
+			
+			// add new word by single character
+			currentWord = newWord.substring(0, currentLength + 1);
+			textHolder.innerHTML = currentWord;
+			setTimeout(ChangingText.addWord, 300);
+		}
+
+		ChangingText.changeWord = function() {
+			++this.step; // increment step to get next word
+			if(this.step == this.words.length) {
+				this.step = 0;
+			}
+
+			ChangingText.addWord();
+			return;
+		}
+
+		ChangingText.deleteWord = function() {
+			if(currentWord.length < 1) {
+				ChangingText.changeWord();
+				return;
+			}
+
+			var currentLength = currentWord.length;
+
+			// remove word by single character
+			currentWord = currentWord.substring(0, currentLength - 1);
+			textHolder.innerHTML = currentWord;
+			setTimeout(ChangingText.deleteWord, 300);
+		}
+
+		// start with new word
+		document.onready = ChangingText.addWord();
+	</script>
+</body>
+</html>
