@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Hitters | keviveks</title>
+		<style>
+			header {
+				height: 75px;
+				border: 2px solid red;
+			}
+			aside {
+				width: 320px;
+				border: 2px solid red;
+			}
+			section {
+				width: 612px;
+				border: 2px solid red;
+				margin: 0 auto;
+			}
+			.right-aside {
+				float: right;
+			}
+			footer {
+				border: 2px solid red;
+			}
+
+			.container table {
+				border: 1px solid blue;
+			}
+			table tr td {
+				padding: 40px;
+			}
+			
+			body span#hitElement {
+				cursor: pointer;
+			}
+
+			.timer {
+				height: 60px;
+			    width: 60px;
+			    /* background: chocolate; */
+			    border: 1px dotted black;
+			    text-align: center;
+			    font-weight: bold;
+			}
+			.timer span {
+				position: relative;
+    			top: 23px;
+			}
+
+			.counter {
+				height: 60px;
+			    width: 60px;
+			    /* background: chocolate; */
+			    border: 1px dotted black;
+			    text-align: center;
+			    font-weight: bold;
+			}
+			.timer span {
+				position: relative;
+    			top: 23px;
+			}
+		</style>
+	</head>
+	<body>
+		<header role="banner">
+			<h1>Challenge Hitters - 2</h1>
+		</header>
+		<aside align="left" class="left-aside">
+			<div class="timer">
+				<span>60</span>
+			</div>
+
+			<div>
+				<select name="type" id="type">
+					<option value="basic">Basic</option>
+					<option value="expert">Expert</option>
+				</select>
+			</div>
+			<div class="playbox">
+				<select name="level" id="level">
+					<option value="1">Level 1</option>
+					<option value="2">Level 2</option>
+					<option value="3">Level 3</option>
+					<option value="4">Level 4</option>
+					<option value="5">Level 5</option>
+					<option value="6">Level 6</option>
+					<option value="7">Level 7</option>
+					<option value="8">Level 8</option>
+					<option value="9">Level 9</option>
+					<option value="10">Level 10</option>
+				</select>
+			</div>
+		</aside>
+		<section class="container">
+			<article>
+				<table>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+			</article>
+		</section>
+		<aside align="right" class="right-aside">
+			<div class="counter">
+				<span>0</span>
+			</div>
+		</aside>
+		<footer>
+			created by Vivek S
+		</footer>
+
+		<script src="./jquery.min.js"></script>
+		<script>
+
+			/*********** initialize all global variables **********/
+			var colors = [
+				"pink", "aliceblue", "antiquewhite", 
+				"cadetblue", "cornflowerblue", "darkgrey",
+				"crimson", "lavender", "mediumaquamarine"
+			];
+			var $table = [];
+			var level = parseInt($("#level").val(), 10);
+			var type = $("#type").val();
+			var interval = setInterval(hitterElement, (3000/level));
+			// var timer = setInterval(runoutTimer, 1000);
+
+			/********** event trigger functions **********/
+			// level and type selections
+			$("select").on("change", function() {
+				level = parseInt($("#level").val(), 10);
+				type = $("#type").val();
+
+				clearInterval(interval);
+				interval = setInterval(hitterElement, (3000/level));
+			});
+
+			// fill table colors on page load
+			$(document).ready(function() {
+				var i = 0;
+				colors = shuffleColors(colors);
+				$("table tr").each(function(k, v) {
+					$table[k] = $(this);
+					var $rows = $(this).find("td");
+					$rows.each(function(kk, vv) {
+						$table[k][kk] = $(this);
+						$(this).css({
+							"background-color": colors[i]
+						});
+						++i;
+					});
+				});
+
+				// call hitter function on start game
+				hitterElement();
+			});
+
+			// Hitter event trigger action
+			$("table tr td").on("click", function() {
+				// if hit on correct element increase counter
+				if($(this).has("span#hitElement").length > 0) {
+					var spanCount = parseInt($(".counter").children("span").html(), 10);
+					$(".counter").children("span").html(++spanCount);
+				} // else if export type decrese counter
+				else if(type === "expert") {
+					var spanCount = parseInt($(".counter").children("span").html(), 10);
+					if(--spanCount < 0) {
+						alert("Game Over!!! Try again!!!");
+						window.location.href = "";
+						return false;
+					}
+					$(".counter").children("span").html(spanCount);
+				}
+			});
+
+			/********* Other defined functions **********/
+			// shuffle color array 
+			function shuffleColors(array) {
+				var m = array.length, t, i;
+				while (m) {
+					i = Math.floor(Math.random() * m--);
+					t = array[m];
+					array[m] = array[i];
+					array[i] = t;
+				}
+				return array;
+			}
+
+			// add hitter element in table
+			function hitterElement() {
+				var n = Math.floor(Math.random() * 3);
+				var nn = Math.floor(Math.random() * 3);
+				$("table").find("span").remove();
+				$table[n][nn].html('<span id="hitElement">H</span>');
+			}
+
+			// timer function
+			function runoutTimer() {
+				var timer = $(".timer").children("span").html();
+				timer = parseInt(timer, 10);
+				if(--timer < 0) {
+					alert("Times up!!! try again!!!");
+					window.location.href = "";
+					return false;
+				}
+				$(".timer").children("span").html(timer);
+			}
+		</script>
+	</body>
+</html>
