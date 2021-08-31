@@ -1,5 +1,5 @@
 # codepen
-[keviveks codepen creations ;>](https://codepen.io/keviveks/)
+[keviveks codepen collections ;>](https://codepen.io/keviveks/)
 
 * **ChallengeHitters** - Hit the hitters hit with time limit [demo](https://codepen.io/keviveks/pen/xZMjGQ)
 * **ChangingText** - Text animation can be even better [demo](https://codepen.io/keviveks/pen/eJoYZN)
